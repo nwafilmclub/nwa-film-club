@@ -333,6 +333,14 @@
     color:rgba(236,230,218,0.6);
     margin:0;
   }
+  .card p.caption a{
+    color:var(--green);
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+  .card p.caption a:hover{
+    color:var(--purple);
+  }
 
   .empty{
     grid-column:1/-1;
@@ -463,14 +471,39 @@ function parseEventDate(dateStr, timeStr){
   return isNaN(d.getTime()) ? null : d;
 }
 
+// Escapes HTML special characters so sheet text can never break the page
+// or inject markup, then re-introduces safe <a> links in their place.
+function escapeHtml(str){
+  return (str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Turns Markdown-style [label](url) into a link, then auto-links any
+// remaining bare URLs (http:// or https://) typed straight into the cell.
+function linkify(str){
+  let safe = escapeHtml(str);
+
+  safe = safe.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+    '<a href="$2" target="_blank" rel="noopener">$1</a>');
+
+  safe = safe.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,
+    '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+
+  return safe;
+}
+
 function cardHtml(e){
   return `
     <article class="card">
-      <div class="date-time">${e.date}${e.time ? ' // ' + e.time : ''}</div>
-      <h3>${e.title}</h3>
-      ${e.location ? `<p class="location">📍 ${e.location}</p>` : ''}
+      <div class="date-time">${escapeHtml(e.date)}${e.time ? ' // ' + escapeHtml(e.time) : ''}</div>
+      <h3>${escapeHtml(e.title)}</h3>
+      ${e.location ? `<p class="location">📍 ${escapeHtml(e.location)}</p>` : ''}
       ${tagsFor(e.type) ? `<div class="tags">${tagsFor(e.type)}</div>` : ''}
-      <p class="caption">${e.caption || ''}</p>
+      <p class="caption">${linkify(e.caption)}</p>
     </article>
   `;
 }
