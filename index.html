@@ -385,7 +385,7 @@
     <div class="screen-inner">
       <div class="header">
         <h1>NWA FILM CLUB</h1>
-        <p class="subhead">Welcome to the club! We partner with local businesses and venues to create pop-up movie events that spotlight local artists and champion genre filmmaking. Think of us as a roaming third space for people to gather, watch a movie and connect.</p>
+        <p class="subhead">Welcome to the club! We partner with local businesses and venues to create pop-up movie events that spotlight local artists and champion genre filmmaking.<br>Think of us as a roaming third space for people to gather, watch a movie and connect.</p>
         <div class="header-actions">
           <a class="header-btn" href="https://discord.gg/xDH76rrXWB" target="_blank" rel="noopener">JOIN THE DISCORD</a>
           <a class="header-btn alt" href="https://www.instagram.com/nwafilmclub/" target="_blank" rel="noopener">FOLLOW ON INSTAGRAM</a>
@@ -407,16 +407,9 @@
 <script>
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-MKgiQvpyZvJbxNy1SHuojsVV0gVGD4Eoc-huI_2cXAp7r20H7wwdzkcKEY8g5-wVeTTpvprKSv3N/pub?output=csv';
 
-const FALLBACK_EVENTS = [
-  { title: "In the Mood for Love", date: "Fri, Aug 8, 2026", time: "7:30 PM", location: "The Rev Room", caption: "Wong Kar-wai on 35mm. Doors at 7, bring your own tissues.", type: "Screening" },
-  { title: "Shorts & Suds", date: "Sat, Aug 16, 2026", time: "6:00 PM", location: "Bike Rack Brewing Co.", caption: "Member-submitted shorts, projected outdoors. Free entry.", type: "Screening, Mix & Mingle" },
-  { title: "Grey Gardens", date: "Tue, Jul 14, 2026", time: "8:00 PM", location: "Fayetteville Public Library", caption: "Kicked off our documentary strand with the Maysles classic.", type: "Screening" },
-  { title: "Rooftop Trivia Night", date: "Fri, Jul 3, 2026", time: "7:00 PM", location: "Bike Rack Brewing Co.", caption: "A casual mixer for members before our summer screening season kicked off.", type: "Mix & Mingle" }
-];
-
 async function loadEvents(){
   if(!SHEET_CSV_URL || SHEET_CSV_URL.startsWith('PASTE_')){
-    renderGrid(FALLBACK_EVENTS);
+    renderGrid([]);
     return;
   }
 
@@ -443,7 +436,7 @@ async function loadEvents(){
 
     renderGrid(events);
   }catch(err){
-    renderGrid(FALLBACK_EVENTS);
+    renderGrid([]);
   }
 }
 
